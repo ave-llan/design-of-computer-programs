@@ -9,7 +9,8 @@ hand_names = ['High Card',
               'Flush',
               'Full House',
               '4 Kind',
-              'Straight Flush']
+              'Straight Flush',
+              '5 Kind']
 
 def hand_percentages(n=700*1000):
     "Sample n random hands and print a table of percentages for each type of hand."
