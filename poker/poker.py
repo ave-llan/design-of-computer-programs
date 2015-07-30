@@ -4,7 +4,7 @@ def poker(hands):
 
 
 def hand_rank(hand):
-    Return None
+    return None
 
 
 def test():
@@ -13,6 +13,10 @@ def test():
     fk = "9D 9H 9S 9C 7D".split()
     fh = "TD TC TH 7C 7D".split()
     assert poker([sf, fk, fh]) == sf
+    assert poker([fh, fk]) == fk
+    assert poker([fh, fh]) == fh
+    assert poker([fh]) == fh
+    assert poker([sf] + 99*[fh]) == sf
     return "tests pass"
 
 print test()
