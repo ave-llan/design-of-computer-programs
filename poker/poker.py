@@ -20,7 +20,7 @@ def hand_rank(hand):
     "Return a value indicating the ranking of a hand."
     # counts is the count of each rank; ranks lists corresponding ranks
     groups = group(['--23456789TJQKA'.index(r) for r,s in hand])
-    counts, ranks = zip(*groups)
+    counts, ranks = unzip(groups)
     if ranks == (14, 5, 4, 3, 2):
         ranks = (5, 4, 3, 2, 1) # straight with low Ace
     straight = len(ranks) == 5 and max(ranks)-min(ranks) == 4
@@ -41,6 +41,8 @@ def group(items):
     groups = [(items.count(item), item) for item in set(items)]
     return sorted(groups, reverse=True)       
 
+def unzip(pairs):
+    return zip(*pairs)
 
 def test():
     "Test cases for the functions in poker program."
