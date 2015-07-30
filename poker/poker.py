@@ -7,6 +7,8 @@ def card_ranks(hand):
     "Return a list of the ranks, sorted with higher first."
     ranks = ['--23456789TJQKA'.index(r) for r,s in hand]
     ranks.sort(reverse=True)
+    if ranks == [14, 5, 4, 3, 2]:
+        ranks = [5, 4, 3, 2, 1] # straight low ace special case
     return ranks
 
 
@@ -36,7 +38,6 @@ def two_pair(ranks):
     if first and first != second:
         return (first, second)
     return None
-
 
 
 def hand_rank(hand):
