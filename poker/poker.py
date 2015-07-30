@@ -2,19 +2,6 @@ def poker(hands):
     "Return the best hand: poker([hand,...]) => hand"
     return max(hands, key=hand_rank)
 
-# straight(ranks): returns True if the hand is a straight.
-# flush(hand):     returns True if the hand is a flush.
-# kind(n, ranks):  returns the first rank that the hand has
-#                  exactly n of. For A hand with 4 sevens 
-#                  this function would return 7.
-# two_pair(ranks): if there is a two pair, this function 
-#                  returns their corresponding ranks as a 
-#                  tuple. For example, a hand with 2 twos
-#                  and 2 fours would cause this function
-#                  to return (4, 2).
-# card_ranks(hand) returns an ORDERED tuple of the ranks 
-#                  in a hand (where the order goes from
-#                  highest to lowest rank). 
 
 def card_ranks(hand):
     "Return a list of the ranks, sorted with higher first."
@@ -27,10 +14,19 @@ def straight(ranks):
     "Return True if the ordered ranks from a 5-card straight."
     return ranks == range(ranks[0], ranks[0]-5, -1)
 
+
 def flush(hand):
     "Return True if all the cards have the same suit."
     suits = [s for r,s in hand]
     return len(set(suits)) == 1
+
+
+def kind(n, ranks):
+    """Return the first rank that this hand has exactly n of.
+    Return None if there is no n-of-a-kind in the hand."""
+    for r in set(ranks):
+        if ranks.count(r) == n: return r
+    return None
 
 
 def hand_rank(hand):
@@ -57,9 +53,16 @@ def hand_rank(hand):
 
 def test():
     "Test cases for the functions in poker program."
-    sf = "6C 7C 8C 9C TC".split()
-    fk = "9D 9H 9S 9C 7D".split()
-    fh = "TD TC TH 7C 7D".split()
+    sf = "6C 7C 8C 9C TC".split() # Straight Flush
+    fk = "9D 9H 9S 9C 7D".split() # Four of a Kind
+    fh = "TD TC TH 7C 7D".split() # Full House
+    tp = "5S 5D 9H 9C 6S".split() # Two pairs
+    fkranks = card_ranks(fk)
+    tpranks = card_ranks(tp)
+    assert kind(4, fkranks) == 9
+    assert kind(3, fkranks) == None
+    assert kind(2, fkranks) == None
+    assert kind(1, fkranks) == 7
     assert card_ranks(sf) == [10, 9, 8, 7, 6]
     assert card_ranks(fk) == [9, 9, 9, 9, 7]
     assert card_ranks(fh) == [10, 10, 10, 7, 7]
