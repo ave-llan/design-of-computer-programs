@@ -1,3 +1,4 @@
+from __future__ import division
 import string, re
 from itertools import permutations
 
