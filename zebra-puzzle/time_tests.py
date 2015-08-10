@@ -8,9 +8,17 @@ def timedcall(fn, *args):
 
 
 def timedcalls(n, fn, *args):
-    "Call function n times wtih args; return the min, avg, and max time."
-    times = [timedcall(fn, *args)[0] for _ in range(n)]
+    """Call fn(*args) repeatedly: n times if n is an int, or up to
+    n seconds if n is a float; return the min, avg, and max time"""
+    if isinstance(n, int):
+        times = [timedcall(fn, *args)[0] for _ in range(n)]
+    else:
+        t0 = time.clock()
+        times = []
+        while (time.clock() - t0 < n):
+            times.append(timedcall(fn, *args)[0])
     return min(times), average(times), max(times)
+
 
 def average(numbers):
     "Return the average (arithmetic mean) of a sequence of numbers."
