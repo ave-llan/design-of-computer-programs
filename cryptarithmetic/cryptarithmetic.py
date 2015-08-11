@@ -49,10 +49,13 @@ def compile_formula(formula, verbose=False):
     # modify the code in this function.
     
     letters = ''.join(set(re.findall('[A-Z]', formula)))
+    firstletters = set(re.findall(r'\b([A-Z])[A-Z]', formula))
     parms = ', '.join(letters)
     tokens = map(compile_word, re.split('([A-Z]+)', formula))
-    body = ' and '.join([word[0] + ' != 0' for word in set(re.findall(r'[A-Z]+', formula))])
-    body += ' and ' + ''.join(tokens)
+    body = ''.join(tokens)
+    if firstletters:
+        tests = ' and '.join(L+'!=0' for L in firstletters)
+        body = '{} and ({})'.format(tests, body)
     f = 'lambda %s: %s' % (parms, body)
     if verbose: print f
     return eval(f), letters
