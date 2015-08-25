@@ -13,28 +13,6 @@ def match(pattern, text):
         return text[:len(text)-len(shortest)]
 
 
-def matchset(pattern, text):
-    "Match pattern at start of text; return a set of remainders of text."
-    op, x, y = components(pattern)
-    if 'lit' == op:
-        return set([text[len(x):]]) if text.startswith(x) else null
-    elif 'seq' == op:
-        return set(t2 for t1 in matchset(x, text) for t2 in matchset(y, t1))
-    elif 'alt' == op:
-        return matchset(x, text) | matchset(y, text)
-    elif 'dot' == op:
-        return set([text[1:]]) if text else null
-    elif 'oneof' == op:
-        return set([text[1:]]) if text[0] in x else null
-    elif 'eol' == op:
-        return set(['']) if text == '' else null
-    elif 'star' == op:
-        return (set([text]) |
-                set(t2 for t1 in matchset(x, text)
-                    for t2 in matchset(pattern, t1) if t1 != text))
-    else:
-        raise ValueError('unknown pattern: %s' % pattern)
-
 null = frozenset()
 
 def components(pattern):
@@ -56,9 +34,6 @@ eol = lambda t: set(['']) if t == '' else null
 def star(x): return lambda t: (set([t]) |
                                set(t2 for t1 in x(t) if t1 != t
                                    for t2 in star(x)(t1)))
-
-
-
 
 def test():
     g = alt(lit('a'), lit('b'))
