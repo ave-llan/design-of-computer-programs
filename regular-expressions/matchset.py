@@ -1,3 +1,18 @@
+def search(pattern, text):
+    "Match pattern anywhere in text; return longest earliest match or None."
+    for i in range(len(text)):
+        m = match(pattern, text[i:])
+        if m is not None:
+            return m
+
+def match(pattern, text):
+    "Match pattern against start of text; return longest match found or None."
+    remainders = matchset(pattern, text)
+    if remainders:
+        shortest = min(remainders, key=len)
+        return text[:len(text)-len(shortest)]
+
+
 def matchset(pattern, text):
     "Match pattern at start of text; return a set of remainders of text."
     op, x, y = components(pattern)
