@@ -8,7 +8,7 @@ def matchset(pattern, text):
     elif 'alt' == op:
         return matchset(x, text) | matchset(y, text)
     elif 'dot' == op:
-        return set([text[1:]]) if len(text) > 0 else null
+        return set([text[1:]]) if text else null
     elif 'oneof' == op:
         return set([text[1:]]) if text[0] in x else null
     elif 'eol' == op:
