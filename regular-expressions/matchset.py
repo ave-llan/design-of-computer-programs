@@ -44,9 +44,13 @@ def components(pattern):
     return pattern[0], x, y
 
 
-def lit(string):  return ('lit', string)
-def seq(x, y):    return ('seq', x, y)
-def alt(x, y):    return ('alt', x, y)
+def lit(s): return lambda text: set([text[len(s):]]) if text.startswith(s) else null
+
+def seq(x, y): return lambda text: set().union(*map(y, x(text)))
+
+def alt(x, y): return lambda text: x(text) | y(text)
+
+
 def star(x):      return ('star', x)
 def plus(x):      return seq(x, star(x))
 def opt(x):       return alt(lit(''), x) #opt(x) means that x is optional
@@ -56,18 +60,8 @@ eol = ('eol',)
 
 
 def test():
-    assert matchset(('lit', 'abc'), 'abcdef')            == set(['def'])
-    assert matchset(('seq', ('lit', 'hi '),
-                     ('lit', 'there ')),
-                   'hi there nice to meet you')          == set(['nice to meet you'])
-    assert matchset(('alt', ('lit', 'dog'),
-                    ('lit', 'cat')), 'dog and cat')      == set([' and cat'])
-    assert matchset(('dot',), 'am i missing something?') == set(['m i missing something?'])
-    assert matchset(('oneof', 'a'), 'aabc123')           == set(['abc123'])
-    assert matchset(('eol',),'')                         == set([''])
-    assert matchset(('eol',),'not end of line')          == frozenset([])
-    assert matchset(('star', ('lit', 'hey')), 'heyhey!') == set(['!', 'heyhey!', 'hey!'])
-
-    return 'tests pass'
+    g = alt(lit('a'), lit('b'))
+    assert g('abc') == set(['bc'])
+    return 'test passes'
 
 print test()
