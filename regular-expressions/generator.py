@@ -49,6 +49,22 @@ def n_ary(f):
     update_wrapper(n_ary_f, f) # add documentation from original function
     return n_ary_f
 
+@decorator
+def memo(f):
+    """Decorator that caches the return value for each call to f(args).
+    Then when called again wtih same args, we can just look it up."""
+    cache = {}
+    def _f(*args):
+        try:
+            return cache[args]
+        except KeyError:
+            cache[args] = result = f(*args)
+            return result
+        except TypeError:
+            # some element of args can't be a dict key
+            return f(args)
+    return _f
+
 
 def test():
 
