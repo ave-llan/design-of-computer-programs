@@ -1,4 +1,5 @@
 from string import split
+import re
 
 defined = r"""Exp     => Term [+-] Exp | Term
 Term    => Factor [*/] Term | Factor
@@ -23,16 +24,12 @@ def grammar(description, whitespace=r'\s*'):
   G = {' ': whitespace}
   description = description.replace('\t', ' ') # remove all tabs
   for line in split(description, '\n'):
-    print 'current line:'
-    print line
     lhs, rhs = split(line, ' => ', 1)
     alternatives = split(rhs, ' | ')
     G[lhs.rstrip()] = tuple(map(split, alternatives))
   return G
 
 G = grammar(defined)
-
-print G
 
 def parse(start_symbol, text, grammar):
   """Example call: parse('Exp', '3*x + b', G).
